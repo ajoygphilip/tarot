@@ -6,13 +6,17 @@ import cardMap from '../lib/constants.js';
 export default function Home() {
   const [cardInput, setCardInput] = useState();
   const [result, setResult] = useState();
+  const [cardImg, setCardImg] = useState("./cardback.jpg");
   
 
   async function onSubmit(event) {
     event.preventDefault();
+    setCardImg("./loading.gif")
+    setResult("");
     setCardInput(getRandomCard())
     
   }
+
 
 
   useEffect( () => {
@@ -35,8 +39,8 @@ export default function Home() {
         if (response.status !== 200) {
           throw data.error || new Error(`Request failed with status ${response.status}`);
         }
-        console.log(cardMap[cardInput])
         setResult(data.result);
+        setCardImg(cardMap[cardInput])
     
       } catch(error) {
         // Consider implementing your own error handling logic here
@@ -72,7 +76,7 @@ export default function Home() {
           
           <input type="submit"  value="Draw a Random Card" />
         </form>
-        <img className={styles.card} src={ typeof(cardInput) === 'undefined'? "./cardback.jpg": cardMap[cardInput]} alt="" />
+        <img className={styles.card} src={cardImg} alt="" />
         <div className={styles.result}>{result}</div>
       </main>
     </div>
